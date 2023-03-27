@@ -1,5 +1,6 @@
 package gg.rsmod.plugins.api.dsl
 
+import gg.rsmod.game.model.combat.CombatStyle
 import gg.rsmod.game.plugin.KotlinPlugin
 import gg.rsmod.plugins.api.BonusSlot
 import gg.rsmod.plugins.api.NpcCombatBuilder
@@ -38,6 +39,7 @@ object NpcCombatDsl {
             combatBuilder.setRespawnDelay(builder.respawnDelay)
             combatBuilder.setPoisonChance(builder.poisonChance)
             combatBuilder.setVenomChance(builder.venomChance)
+            combatBuilder.setAttackStyle(builder.attackStyle)
         }
 
         fun aggro(init: AggressivenessBuilder.() -> Unit) {
@@ -121,6 +123,9 @@ object NpcCombatDsl {
          * meaning the npc will always inflict venom on damage.
          */
         var venomChance = -1.0
+
+
+        var attackStyle = CombatStyle.STAB
     }
 
     @CombatDslMarker

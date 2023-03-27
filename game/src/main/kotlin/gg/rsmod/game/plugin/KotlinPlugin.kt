@@ -427,6 +427,8 @@ abstract class KotlinPlugin(private val r: PluginRepository, val world: World, v
         others.forEach { other -> r.bindNpcCombat(other, logic) }
     }
 
+    fun on_before_hit(plugin: Plugin.() -> Unit) = r.bindBeforeHit(plugin)
+
     /**
      * Invoke [logic] when [gg.rsmod.game.message.impl.OpNpcTMessage] is handled.
      */

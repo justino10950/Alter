@@ -218,7 +218,7 @@ open class Player(world: World) : Pawn(world) {
 
     var gameMode = 0
 
-    var xpRate = 1.0
+    var xpRate = 60.0
 
     /**
      * The last cycle that this client has received the MAP_BUILD_COMPLETE
@@ -382,11 +382,12 @@ open class Player(world: World) : Pawn(world) {
             calculateBonuses()
         }
 
+        hitsCycle()
+
         if (timers.isNotEmpty) {
             timerCycle()
         }
 
-        hitsCycle()
 
         for (i in 0 until varps.maxVarps) {
             if (varps.isDirty(i)) {

@@ -1,9 +1,11 @@
 package gg.rsmod.plugins.content.combat
 
+import gg.rsmod.game.Server.Companion.logger
 import gg.rsmod.game.action.PawnPathAction
 import gg.rsmod.game.model.attr.COMBAT_TARGET_FOCUS_ATTR
 import gg.rsmod.game.model.attr.FACING_PAWN_ATTR
 import gg.rsmod.game.model.attr.INTERACTING_PLAYER_ATTR
+import gg.rsmod.game.model.timer.ANIMATION_DELAY
 import gg.rsmod.game.model.timer.FROZEN_TIMER
 import gg.rsmod.game.model.timer.STUN_TIMER
 import gg.rsmod.plugins.content.combat.specialattack.SpecialAttacks
@@ -28,6 +30,15 @@ set_combat_logic {
 on_player_option("Attack") {
     val target = pawn.attr[INTERACTING_PLAYER_ATTR]?.get() ?: return@on_player_option
     player.attack(target)
+}
+
+on_before_hit {
+    if(!pawn.timers.has(ANIMATION_DELAY)) {
+        val blockAnimation = CombatConfigs.getBlockAnimation(pawn)
+        pawn.animate(blockAnimation)
+        if(pawn is Player)
+            logger.info("Block")
+    }
 }
 
 suspend fun cycle(it: QueueTask): Boolean {

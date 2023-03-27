@@ -1,5 +1,6 @@
 package gg.rsmod.plugins.content.combat
 
+import gg.rsmod.game.Server.Companion.logger
 import gg.rsmod.game.action.PawnPathAction
 import gg.rsmod.game.model.Tile
 import gg.rsmod.game.model.attr.AttributeKey
@@ -12,6 +13,7 @@ import gg.rsmod.game.model.entity.Pawn
 import gg.rsmod.game.model.entity.Player
 import gg.rsmod.game.model.queue.QueueTask
 import gg.rsmod.game.model.timer.ACTIVE_COMBAT_TIMER
+import gg.rsmod.game.model.timer.ANIMATION_DELAY
 import gg.rsmod.game.model.timer.ATTACK_DELAY
 import gg.rsmod.plugins.api.*
 import gg.rsmod.plugins.api.ext.*
@@ -72,8 +74,15 @@ object Combat {
             return
         }
 
-        val blockAnimation = CombatConfigs.getBlockAnimation(target)
-        target.animate(blockAnimation)
+        if(target is Player && target.timers.has(ANIMATION_DELAY)) {
+            logger.info("Player block anim" + target.timers[ANIMATION_DELAY])
+        }
+
+        /*
+        if(!target.timers.has(ANIMATION_DELAY) || target.timers[ANIMATION_DELAY] == 0) {
+            val blockAnimation = CombatConfigs.getBlockAnimation(target)
+            target.animate(blockAnimation)
+        }*/
 
         if (target.lock.canAttack()) {
             if (target.entityType.isNpc) {

@@ -1,5 +1,6 @@
 package gg.rsmod.plugins.api
 
+import gg.rsmod.game.model.combat.CombatStyle
 import gg.rsmod.game.model.combat.NpcCombatDef
 import gg.rsmod.plugins.api.ext.enumSetOf
 
@@ -76,6 +77,8 @@ class NpcCombatBuilder {
 
     private var dropTable = -1
 
+    private var attackStyle = CombatStyle.STAB
+
     fun build(): NpcCombatDef {
         check(maxHealth != -1) { "Max health must be set." }
         check(attackSpeed != -1) { "Attack speed must be set." }
@@ -99,13 +102,17 @@ class NpcCombatBuilder {
                 defaultBlockAnim, deathAnimList, respawnDelay, aggroRadius,
                 aggroTargetDelay, aggroTimer, poisonChance, venomChance,
                 poisonImmunity, venomImmunity, slayerReq, slayerXp,
-                bonuses.toList(), speciesSet)
+                bonuses.toList(), speciesSet, attackStyle)
     }
 
     fun setHitpoints(health: Int): NpcCombatBuilder {
         check(maxHealth == -1) { "Max health already set." }
         maxHealth = health
         return this
+    }
+
+    fun setAttackStyle(combatStyle: CombatStyle) {
+        attackStyle = combatStyle
     }
 
     /**

@@ -19,6 +19,9 @@ class AnimDef(id: Int) : Definition(id) {
     override fun decode(buf: ByteBuf, opcode: Int) {
         when (opcode) {
             1 -> {
+                if(id == 5389) {
+                    val t = 0
+                }
                 val frameCount = buf.readUnsignedShort()
                 var totalFrameLength = 0
                 frameIds = IntArray(frameCount)
@@ -52,7 +55,7 @@ class AnimDef(id: Int) : Definition(id) {
                  * Convert the length of the combined frames into game cycles
                  * (assuming a game cycle is 600ms).
                  */
-                lengthInCycles = Math.ceil((totalFrameLength * 20.0) / 600.0).toInt()
+                lengthInCycles = Math.round((totalFrameLength * 20.0) / 600.0).toInt()
             }
             2 -> buf.readUnsignedShort()
             3 -> {

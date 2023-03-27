@@ -1,5 +1,6 @@
 package gg.rsmod.plugins.content.combat.formula
 
+import gg.rsmod.game.Server.Companion.logger
 import gg.rsmod.game.model.combat.AttackStyle
 import gg.rsmod.game.model.combat.CombatStyle
 import gg.rsmod.game.model.entity.Npc
@@ -70,6 +71,8 @@ object MeleeCombatFormula : CombatFormula {
     private fun getDefenceRoll(pawn: Pawn, target: Pawn): Int {
         val a = if (pawn is Player) getEffectiveDefenceLevel(pawn) else if (pawn is Npc) getEffectiveDefenceLevel(pawn) else 0.0
         val b = getEquipmentDefenceBonus(pawn, target)
+        if(target is Npc)
+            logger.info("npc defence: $b")
 
         var maxRoll = a * (b + 64.0)
         maxRoll = applyDefenceSpecials(target, maxRoll)
@@ -146,7 +149,10 @@ object MeleeCombatFormula : CombatFormula {
             CombatStyle.CRUSH -> BonusSlot.ATTACK_CRUSH
             else -> throw IllegalStateException("Invalid combat style. $combatStyle")
         }
-        return pawn.getBonus(bonus).toDouble()
+        var attackBonus = pawn.getBonus(bonus).toDouble()
+        if(pawn is Npc)
+            logger.info("combat style: $combatStyle, bonus : $attackBonus")
+        return attackBonus
     }
 
     private fun getEquipmentDefenceBonus(pawn: Pawn, target: Pawn): Double {

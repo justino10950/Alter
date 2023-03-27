@@ -8,6 +8,7 @@ import gg.rsmod.game.model.entity.GroundItem
 import gg.rsmod.game.model.entity.Npc
 import gg.rsmod.game.model.entity.Pawn
 import gg.rsmod.game.model.entity.Player
+import gg.rsmod.game.model.timer.ANIMATION_DELAY
 import gg.rsmod.plugins.api.EquipmentType
 import gg.rsmod.plugins.api.Skills
 import gg.rsmod.plugins.api.WeaponType
@@ -140,6 +141,7 @@ object RangedCombatStrategy : CombatStrategy {
             }
         }
         pawn.animate(animation)
+        pawn.timers[ANIMATION_DELAY] = 1
 
         val formula = RangedCombatFormula
         val accuracy = formula.getAccuracy(pawn, target)

@@ -1,9 +1,11 @@
 package gg.rsmod.plugins.content.combat.strategy
 
+import gg.rsmod.game.Server.Companion.logger
 import gg.rsmod.game.model.combat.XpMode
 import gg.rsmod.game.model.entity.Npc
 import gg.rsmod.game.model.entity.Pawn
 import gg.rsmod.game.model.entity.Player
+import gg.rsmod.game.model.timer.ANIMATION_DELAY
 import gg.rsmod.plugins.api.Skills
 import gg.rsmod.plugins.api.WeaponType
 import gg.rsmod.plugins.api.ext.hasWeaponType
@@ -35,12 +37,14 @@ object MeleeCombatStrategy : CombatStrategy {
 
         val animation = CombatConfigs.getAttackAnimation(pawn)
         pawn.animate(animation)
+        pawn.timers[ANIMATION_DELAY] = 1
+        if(pawn is Player)
+            logger.info("Player attack anim " + pawn.timers[ANIMATION_DELAY])
         // @TODO
         val formula = MeleeCombatFormula
         val accuracy = formula.getAccuracy(pawn, target)
         val maxHit = formula.getMaxHit(pawn, target)
         val landHit = accuracy >= world.randomDouble()
-
 
         val damage = pawn.dealHit(target = target, maxHit = maxHit, landHit = landHit, delay = 1).hit.hitmarks.sumBy{it.damage}
 

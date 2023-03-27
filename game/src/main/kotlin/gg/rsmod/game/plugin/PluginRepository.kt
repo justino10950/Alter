@@ -341,6 +341,8 @@ class PluginRepository(val world: World) {
      */
     private val npcDeathPlugins = Int2ObjectOpenHashMap<Plugin.() -> Unit>()
 
+    private val beforeHitPlugins = mutableListOf<Plugin.() -> Unit>()
+
     /**
      * A map of plugins that occur when an [Event] is triggered.
      */
@@ -590,6 +592,7 @@ class PluginRepository(val world: World) {
         npcPreDeathPlugins[npc] = plugin
     }
 
+
     fun executeNpcPreDeath(npc: Npc) {
         npcPreDeathPlugins[npc.id]?.let { plugin ->
             npc.executePlugin(plugin)
@@ -604,6 +607,14 @@ class PluginRepository(val world: World) {
         npcDeathPlugins[npc.id]?.let { plugin ->
             npc.executePlugin(plugin)
         }
+    }
+
+    fun bindBeforeHit(plugin: Plugin.() -> Unit) {
+        beforeHitPlugins.add(plugin)
+    }
+
+    fun executeBeforeHit(pawn: Pawn) {
+        beforeHitPlugins.forEach { plugin -> pawn.executePlugin(plugin) }
     }
 
     fun bindSpellOnNpc(parent: Int, child: Int, plugin: Plugin.() -> Unit) {

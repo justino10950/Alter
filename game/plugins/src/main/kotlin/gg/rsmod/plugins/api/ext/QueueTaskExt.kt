@@ -450,7 +450,7 @@ suspend fun QueueTask.produceItemBox(vararg items: Int, type: Int = 0, title: St
     terminateAction!!(this)
 
     val msg = requestReturnValue as? ResumePauseButtonMessage ?: return
-    val child = msg.component
+    val child = msg.component / 256
 
     if (child < baseChild || child >= baseChild + items.size)
         return

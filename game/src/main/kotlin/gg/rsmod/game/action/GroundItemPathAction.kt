@@ -2,6 +2,7 @@ package gg.rsmod.game.action
 
 import gg.rsmod.game.fs.def.ItemDef
 import gg.rsmod.game.message.impl.SetMapFlagMessage
+import gg.rsmod.game.model.Direction
 import gg.rsmod.game.model.EntityType
 import gg.rsmod.game.model.MovementQueue
 import gg.rsmod.game.model.Tile
@@ -16,6 +17,8 @@ import gg.rsmod.game.model.entity.Player
 import gg.rsmod.game.model.item.Item
 import gg.rsmod.game.model.queue.QueueTask
 import gg.rsmod.game.model.queue.TaskPriority
+import gg.rsmod.game.model.timer.FROZEN_TIMER
+import gg.rsmod.game.model.timer.STUN_TIMER
 import gg.rsmod.game.plugin.Plugin
 import gg.rsmod.game.service.log.LoggerService
 import java.lang.ref.WeakReference
@@ -43,22 +46,22 @@ object GroundItemPathAction {
         val p = ctx as Player
         val item = p.attr[INTERACTING_GROUNDITEM_ATTR]!!.get()!!
         val opt = p.attr[INTERACTING_OPT_ATTR]!!
-        if (p.tile.sameAs(item.tile) || p.tile.isNextTo(item.tile)) {
-            /**
-             * Need rewrite. @TODO
-             */
-            //if (p.tile.isNextTo(item.tile)) {
-            //    p.faceTile(item.tile)
-            //    p.animate(832)
-            //    handleAction(p, item, opt)
-            //} else if (p.tile.sameAs(item.tile)) {
-            //    handleAction(p, item, opt)
-            //}
-             if (p.tile.sameAs(item.tile)) {
-                handleAction(p, item, opt)
-             }
+        if(p.tile.sameAs(item.tile)) {
+            handleAction(p, item, opt)
+        }
+        p.walkTo(item.tile, MovementQueue.StepType.NORMAL)
+        val destination = p.movementQueue.peekLast()
+        if(destination == null || p.tile.sameAs(destination)) {
+            if(p.tile.isNextTo(item.tile)) {
+                p.queue(TaskPriority.STANDARD) {
+                    terminateAction = {
+                        p.stopMovement()
+                        p.write(SetMapFlagMessage(255, 255))
+                    }
+                    pickupDistance(item, opt, 2)
+                }
+            }
         } else {
-            p.walkTo(item.tile, MovementQueue.StepType.NORMAL)
             p.queue(TaskPriority.STANDARD) {
                 terminateAction = {
                     p.stopMovement()
@@ -77,29 +80,36 @@ object GroundItemPathAction {
             return
         }
         while (true) {
-            if (!p.tile.sameAs(destination)) {
+            if(p.movementQueue.peekLast() != null) {
                 wait(1)
                 continue
             }
-            if (p.tile.sameAs(item.tile) || p.tile.isNextTo(item.tile)) {
-                /**
-                 * Need rewrite. @TODO
-                 */
-//                if (p.tile.isNextTo(item.tile)) {
-//                    p.faceTile(item.tile)
-//                    p.animate(832)
-//                    handleAction(p, item, opt)
-//                } else if (p.tile.sameAs(item.tile)) {
-//                    handleAction(p, item, opt)
-//                }
-                if (p.tile.sameAs(item.tile)) {
-                    handleAction(p, item, opt)
-                }
+
+            if(p.tile.sameAs(item.tile)) {
+                handleAction(p, item, opt)
+            } else if(p.tile.isNextTo(item.tile)) {
+                pickupDistance(item, opt, 1)
             } else {
                 p.writeMessage(Entity.YOU_CANT_REACH_THAT)
             }
             break
         }
+    }
+
+    private suspend fun QueueTask.pickupDistance(item: GroundItem, opt: Int, delay: Int) {
+        val p = ctx as Player
+        p.faceTile(item.tile)
+        wait(delay)
+        if(p.world.collision.isBlocked(p.tile, Direction.between(p.tile, item.tile), false)) {
+            p.writeMessage(Entity.YOU_CANT_REACH_THAT)
+            return
+        }
+        if (!p.world.isSpawned(item)) {
+            p.writeMessage("Item is already picked up")
+            return
+        }
+        p.animate(832)
+        handleAction(p, item, opt)
     }
 
     private fun handleAction(p: Player, groundItem: GroundItem, opt: Int) {

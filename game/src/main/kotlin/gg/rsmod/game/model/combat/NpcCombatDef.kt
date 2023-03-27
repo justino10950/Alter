@@ -11,7 +11,7 @@ data class NpcCombatDef(
         val aggressiveRadius: Int, val aggroTargetDelay: Int, val aggressiveTimer: Int,
         val poisonChance: Double, val venomChance: Double, val poisonImmunity: Boolean,
         val venomImmunity: Boolean, val slayerReq: Int, val slayerXp: Double,
-        val bonuses: List<Int>, val species: Set<Any>) {
+        val bonuses: List<Int>, val species: Set<Any>, var attackStyle: CombatStyle) {
 
     companion object {
 
@@ -31,6 +31,7 @@ data class NpcCombatDef(
                 deathAnimation = listOf(DEFAULT_DEATH_ANIMATION),
                 respawnDelay = DEFAULT_RESPAWN_DELAY, poisonChance = 0.0,
                 venomChance = 0.0, poisonImmunity = false, venomImmunity = false,
-                slayerReq = 1, slayerXp = 0.0, bonuses = emptyList(), species = emptySet())
+                slayerReq = 1, slayerXp = 0.0, bonuses = emptyList(), species = emptySet(),
+                attackStyle = CombatStyle.STAB)
     }
 }

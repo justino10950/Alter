@@ -27,9 +27,10 @@ spawn_npc(npc= Npcs.SHEEP_2789, x = 3199, z = 3261, walkRadius = 10, direction =
 spawn_npc(npc= Npcs.SHEEP_2789, x = 3201, z = 3272, walkRadius = 10, direction = Direction.SOUTH)
 spawn_npc(npc= Npcs.SHEEP_2789, x = 3202, z = 3268, walkRadius = 10, direction = Direction.NORTH)
 spawn_npc(npc= Npcs.SHEEP_2789, x = 3206, z = 3266, walkRadius = 10, direction = Direction.WEST)
-spawn_npc(npc= Npcs.RAM_1265, x = 3201, z = 3263, walkRadius = 10, direction = Direction.NORTH)
-spawn_npc(npc= Npcs.RAM_1265, x = 3207, z = 3271, walkRadius = 10, direction = Direction.SOUTH)
-spawn_npc(npc= Npcs.RAM_1265, x = 3195, z = 3271, walkRadius = 10, direction = Direction.EAST)
+spawn_npc(npc= Npcs.RAM_1265, x = 3209, z = 3259, walkRadius = 10, direction = Direction.NORTH)
+spawn_npc(npc= Npcs.RAM_1265, x = 3195, z = 3265, walkRadius = 10, direction = Direction.SOUTH)
+spawn_npc(npc= Npcs.RAM_1265, x = 3196, z = 3275, walkRadius = 10, direction = Direction.EAST)
+spawn_npc(npc= Npcs.RAM_1265, x = 3199, z = 3270, walkRadius = 10, direction = Direction.EAST)
 spawn_npc(npc= Npcs.HUGE_SPIDER_134, x = 3168, z = 3243, walkRadius = 7, direction = Direction.SOUTH)
 spawn_npc(npc= Npcs.GIANT_SPIDER, x = 3165, z = 3251, walkRadius = 7, direction = Direction.EAST)
 spawn_npc(npc= Npcs.GIANT_SPIDER_3018, x = 3246, z = 3248, walkRadius = 7, direction = Direction.EAST)
@@ -74,6 +75,7 @@ spawn_npc(npc= Npcs.WOMAN_3112, x = 3229, z = 3238, walkRadius = 3, direction = 
 spawn_npc(npc= Npcs.MAN_3014, x = 3231, z = 3236, walkRadius = 3, direction = Direction.WEST)
 spawn_npc(npc= Npcs.ZOMBIE_RAT_3970, x = 3246, z = 3198, walkRadius = 5, direction = Direction.WEST)
 spawn_npc(npc= Npcs.ZOMBIE_RAT, x = 3239, z = 3198, walkRadius = 5, direction = Direction.WEST)
+spawn_npc(npc = Npcs.COW, x = 3259, z = 3276, walkRadius = 5, direction = Direction.EAST)
 
 /**Lumbridge item spawns*/
 spawn_item(item = Items.LOGS, amount = 1, x = 3205, z = 3224, height = 2)

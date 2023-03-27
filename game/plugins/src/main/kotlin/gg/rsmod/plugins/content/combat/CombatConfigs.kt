@@ -1,5 +1,6 @@
 package gg.rsmod.plugins.content.combat
 
+import gg.rsmod.game.Server.Companion.logger
 import gg.rsmod.game.model.combat.AttackStyle
 import gg.rsmod.game.model.combat.CombatClass
 import gg.rsmod.game.model.combat.CombatStyle
@@ -10,10 +11,7 @@ import gg.rsmod.game.model.entity.Player
 import gg.rsmod.plugins.api.EquipmentType
 import gg.rsmod.plugins.api.WeaponType
 import gg.rsmod.plugins.api.cfg.Items
-import gg.rsmod.plugins.api.ext.getAttackStyle
-import gg.rsmod.plugins.api.ext.getEquipment
-import gg.rsmod.plugins.api.ext.hasEquipped
-import gg.rsmod.plugins.api.ext.hasWeaponType
+import gg.rsmod.plugins.api.ext.*
 import gg.rsmod.plugins.content.combat.strategy.CombatStrategy
 import gg.rsmod.plugins.content.combat.strategy.MagicCombatStrategy
 import gg.rsmod.plugins.content.combat.strategy.MeleeCombatStrategy
@@ -66,6 +64,7 @@ object CombatConfigs {
         }
 
         if (pawn is Player) {
+            logger.info("weapon type" + pawn.getWeaponType())
             return when {
                 pawn.attr.has(Combat.CASTING_SPELL) -> CombatClass.MAGIC
                 pawn.hasWeaponType(WeaponType.BOW, WeaponType.CHINCHOMPA, WeaponType.CROSSBOW, WeaponType.THROWN) -> CombatClass.RANGED
